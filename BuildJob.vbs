@@ -1,7 +1,14 @@
 Dim FSO, FSO2
 Set FSO = CreateObject("Scripting.FileSystemObject")
 Set FSO2 = CreateObject("Scripting.FileSystemObject")
-sourcePath = "C:\QuickenBuilds\25.1.4.13\RPM"
+version = Wscript.Arguments(0)
+build=Wscript.Arguments(1)
+Wscript.Echo version
+Wscript.Echo build
+
+sourcePath = "c:\QuickenBuilds\QW"&version&"\qknty"&version&"baseinstaller-"&build&"-distribution\RPM"
+Wscript.Echo sourcePath
+'sourcePath = "C:\QuickenBuilds\25.1.4.13\RPM"
 destinationPath = "c:\X"
 
 ' Write into a log file
@@ -34,7 +41,8 @@ FSO.CopyFolder sourcePath, destinationPath
 
 ' Verify whether the file copied successfully or not
 Set destinationFolder = FSO2.GetFolder(destinationPath)
-WScript.Echo destinationFolder.Size/1024/1024 &"MB"
+objLogFile.WriteLine "Size of the source folder to copy " & destinationFolder.Size/1024/1024 &"MB"
+'WScript.Echo destinationFolder.Size/1024/1024 &"MB"
 
 if (sourceFolder.Size = destinationFolder.Size) Then
 	WScript.Echo "Build Copied Successfully"
@@ -53,7 +61,7 @@ rpmInstallPath = destinationPath & "\Disk1\setup.exe /s"
 WshShell.Run rpmInstallPath,,false
 
 'wait for some 3 mins, hoping installation wont take more than 3 mins..
-Wscript.Sleep 1*60*1000
+Wscript.Sleep 2*60*1000
 
 ' see qw.exe running in the process even after installation, kill the process
 On Error Resume Next
